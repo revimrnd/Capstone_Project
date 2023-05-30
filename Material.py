@@ -19,8 +19,8 @@ def display():
                 print('Material does not exist')
             for key in listMaterial.keys():
                 if findM.lower() in listMaterial[key]['Material'].lower():
-                    print('Code \t|Material \t|Inventory |Distribution |Supplier')
-                    print('{} \t|{} \t|{} \t|{} |{}'.format(listMaterial[key]['Code'],listMaterial[key]['Material'],
+                    print('\nCode \t|Material \t |Inventory |Distribution |Supplier\n')
+                    print('{} \t|{} \t\t |{} \t    |{}   \t  |{}'.format(listMaterial[key]['Code'],listMaterial[key]['Material'],
                         listMaterial[key]['Inventory'],listMaterial[key]['Distribution'],listMaterial[key]['Supplier']))
                 else:
                     continue
@@ -28,13 +28,13 @@ def display():
             findD = input('Find the distribution: ')
             if findD.lower() not in listMaterial.keys():
                 print('Material does not exist')
-                for key in listMaterial.keys():
-                    if findD.lower() in listMaterial[key]['Distribution'].lower():
-                        print('Code \t|Material \t|Inventory |Distribution |Supplier')
-                        print('{} \t|{} \t|{} \t|{} |{}'.format(listMaterial[key]['Code'],listMaterial[key]['Material'],
-                            listMaterial[key]['Inventory'],listMaterial[key]['Distribution'],listMaterial[key]['Supplier']))
-                    else:
-                        continue
+            for key in listMaterial.keys():
+                if findD.lower() in listMaterial[key]['Distribution'].lower():
+                    print('\nCode \t|Material \t |Inventory |Distribution |Supplier\n')
+                    print('{} \t|{} \t\t |{} \t    |{}   \t  |{}'.format(listMaterial[key]['Code'],listMaterial[key]['Material'],
+                        listMaterial[key]['Inventory'],listMaterial[key]['Distribution'],listMaterial[key]['Supplier']))
+                else:
+                    continue
         elif prompt1 == 'Back':
             main()
                  
@@ -86,7 +86,7 @@ def renew():
         while newUpdate.lower() in listMaterial.keys():
             # Pilihan menu update berdasarkan kategori
             titleU = f'\n- Update Category\n'
-            askCategory = ['Code','Material','Inventory','Distribution','Supplier']
+            askCategory = ['Code','Material','Inventory','Distribution','Supplier','Back']
             prompt4 = pps.inputMenu(
                 prompt=titleU, choices=askCategory, numbered=True)
             if prompt4 == 'Code':
@@ -146,6 +146,8 @@ def renew():
                     template()
                     print('Supplier has been updated')
                     continue
+            elif prompt4 == 'Back':
+                renew()
     elif prompt3 == 'Back':
         main()
 
@@ -153,50 +155,80 @@ def renew():
 # Menu penghapusan data
 def clear():
     # Sub menu clear
-    titleC = f'\n--- Clear Material\n'
-    menuClear = ['Delete', 'Back']
-    prompt5 = pps.inputMenu(
-        prompt=titleC, choices=menuClear, numbered=True)
-    if prompt5 == 'Delete':
-        template()
-        delMaterial = str(input('Enter the material you wish to delete: '))
-        newDelMat = delMaterial.replace(' ','')
-        while newDelMat.lower() not in listMaterial.keys():
-            print('Material does not exist')
-            break
-        else:
-            checkClear = str(input('Are you sure wish to delete {delMaterial}?(Y/N)'))
-            while checkClear != 'Y':
-                print('Failed to delete')
+    while True:
+        titleC = f'\n--- Clear Material\n'
+        menuClear = ['Delete', 'Back']
+        prompt5 = pps.inputMenu(
+            prompt=titleC, choices=menuClear, numbered=True)
+        if prompt5 == 'Delete':
+            template()
+            delMaterial = str(input('Enter the material you wish to delete: '))
+            newDelMat = delMaterial.replace(' ','')
+            while newDelMat.lower() not in listMaterial.keys():
+                print('Material does not exist')
                 break
             else:
-                del listMaterial[newDelMat.lower()]
-                template()
-                print('Success for deleting')
-    elif prompt5 == 'Back':
-        main()
-                
+                checkClear = str(input(f'Are you sure wish to delete {delMaterial}?(Y/N)'))
+                while checkClear != 'Y':
+                    print('Failed to delete')
+                    break
+                else:
+                    del listMaterial[newDelMat.lower()]
+                    template()
+                    print('Success for deleting')
+        elif prompt5 == 'Back':
+            main()
+
+
+# Menu penjadwalan 
+def schedule():
+    # Sub menu schedule
+    while True:
+        titleS = f'\n--- Schedule Material\n'
+        menuSchedule = ['Production','Purchasing','Back']
+        prompt6 = pps.inputMenu(
+            prompt=titleS, choices=menuSchedule, numbered=True)
+        if prompt6 == 'Production':
+            print('Please input the data for scheduling')
+            matP = str(input('Material: '))
+            invP = int(input('Inventory: '))
+            disP = str(input('Distribution: '))
+            schP = str(input('Date: '))
+            print(f'\nHere is your production schedule\n{matP}\n{invP}\n{disP}\n{schP}')
+            checkPd = str(input('Are you sure want to confirm the schedule?(Y/N)'))
+            while checkPd != 'Y':
+                print('Failed to confirm')
+                continue
+            else:
+                print('Success for confirming')
+        elif prompt6 == 'Purchasing':
+            print('Please input the data for scheduling')
+            matPur = str(input('Material: '))
+            invPur = int(input('Inventory: '))
+            supPur = str(input('Supplier: '))
+            schPur = str(input('Date: '))
+            print(f'\nHere is your purchasing schedule\n{matPur}\n{invPur}\n{supPur}\n{schPur}')
+            checkPur = str(input('Are you sure want to confirm the schedule?(Y/N)'))
+            while checkPur != 'Y':
+                print('Failed to confirm')
+                continue
+            else:
+                print('Success for confirming')
+        elif prompt6 == 'Back':
+            main()
+
 
 # Fungsi template daftar material
 def template():
     if len(listMaterial) == 0:
         print('\n Material unavailable')
     else:
-        print('\t _____________________ List Material ____________________')
-        print('Code \t|Material \t|Inventory |Distribution |Supplier')
+        print('\n______________________ List Material _____________________\n')
+        print('Code \t|Material \t |Inventory |Distribution |Supplier\n')
         for key in listMaterial.keys():
-            print('{} \t|{} \t|{} \t|{} |{}'.format(listMaterial[key]['Code'],listMaterial[key]['Material'],
+            print('{} \t|{} \t\t |{} \t    |{}   \t  |{}'.format(listMaterial[key]['Code'],listMaterial[key]['Material'],
                 listMaterial[key]['Inventory'],listMaterial[key]['Distribution'],listMaterial[key]['Supplier']))
 
-# def schedule():
-#     titleS = f'\n--- Schedule Material\n'
-#     menuSchedule = ['Production','Purchasing','Back']
-#     prompt6 = pps.inputMenu(
-#         prompt=titleS, choices=menuSchedule, numbered=True)
-#     if prompt6 == 'Production':
-#         prompt7 = str(input('Input material to schedule: '))
-#         dateProduction = str(input('Enter the date for production: '))
-#         for key in date
 
 # Menu utama sistem
 def main():
@@ -204,7 +236,7 @@ def main():
         # Tampilan title
         titleM = f'\nMaterial Management System\n'
         # Pilihan menu utama 
-        menu = ['Display','Add','Renew','Clear','Exit']
+        menu = ['Display','Add','Renew','Clear','Schedule','Exit']
         user = pps.inputMenu(
             prompt=titleM, choices=menu, numbered=True)
         # Untuk menampilkan data
@@ -219,8 +251,12 @@ def main():
         # Untuk menghapus data
         elif user == 'Clear':
             clear()
+        # Untuk mengupdate data baru
+        elif user == 'Schedule':
+            schedule()
         # Untuk keluar dari sistem
         sys.exit()
+
 
 if __name__ == "__main__":
     listMaterial = {
